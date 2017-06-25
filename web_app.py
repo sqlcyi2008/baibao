@@ -1,13 +1,15 @@
-#-*- encoding:utf-8 -*-
+# -*- encoding:utf-8 -*-
 
 import tornado.web
 import tornado.websocket
 import tornado.httpserver
 import tornado.ioloop
 
+
 class IndexPageHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('index.html')
+
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
@@ -17,10 +19,11 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         self.write_message(u"你好，主人！")
 
     def on_message(self, message):
-        self.write_message(u"Your message was: "+message)
+        self.write_message(u"Your message was: " + message)
 
     def on_close(self):
         pass
+
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -29,8 +32,9 @@ class Application(tornado.web.Application):
             (r'/ws', WebSocketHandler)
         ]
 
-        settings = { "template_path": "."}
+        settings = {"template_path": "."}
         tornado.web.Application.__init__(self, handlers, **settings)
+
 
 if __name__ == '__main__':
     ws_app = Application()

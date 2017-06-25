@@ -31,5 +31,5 @@ while True:
         break
     # print line.replace('\n', '')
     # print(line, '')
-    r = redis.Redis(host='localhost', port=6379, db=0)
-    r.lpush("baibaoxiang", "exec_jbx=" + line.replace('\n', ''))
+    #r = redis.Redis(host='localhost', port=6379, db=0)
+    #r.lpush("baibaoxiang", "exec_jbx=" + line.replace('\n', ''))
