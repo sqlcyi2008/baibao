@@ -16,6 +16,8 @@ try:
     while True:
         raw_buffer = sniffer.recvfrom(65535)[0]
         ipp = dpkt.ip.IP(raw_buffer)
+        ip = '%d.%d.%d.%d' % tuple(map(ord, list(ipp.src.decode())))
+        print(ip+":"+str(ipp.data.dport))
         if ipp.data.__class__.__name__ == 'TCP' and ipp.data.dport == 8080:
             tcp = ipp.data.data.decode()
             if tcp.startswith('GET') or tcp.startswith('POST'):
