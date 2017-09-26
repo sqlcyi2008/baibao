@@ -40,10 +40,28 @@
     </style>
     <!-- snippet (syntax highlighting for code examples)-->
     <script type="text/javascript" src="../js/demo/jquery.snippet.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="../css/demo/jquery.snippet.css"><script type="text/javascript">
+    <link type="text/css" rel="stylesheet" href="../css/demo/jquery.snippet.css">
+
+    <script type="text/javascript">
+
+    function showMsg()
+    {
+        var today = new Date();
+        //alert("The time is: " + today.toString ());
+        $.getJSON("/pkt",function(result){
+            $.each(result, function(i, field){
+                $("#mainlist").append('<p class="info dismissible message">'+field+'</p>');
+            });
+        });
+    }
+
+
 (function() {
 
   $(document).ready(function() {
+
+    setInterval ("showMsg()", 1000);
+
     $('pre[data-lang="html"]').snippet("html", {
       style: "groundwork",
       clipboard: "../js/demo/ZeroClipboard.swf"
@@ -67,59 +85,15 @@
   </head>
   <body>
     <div class="container">
-      <hr>
       <div class="row">
         <div class="one whole padded">
           <div class="row">
-            <div class="one half padded bounceInUp animated">
-              <h4>消息</h4>
-              <p class="info message">This is an info message.</p>
-              <p class="info dismissible message">This is a dismissible info message.</p>
-              <p class="success message">This is a success message.</p>
-              <p class="success dismissible message">This is a dismissible success message.</p>
-              <p class="question message">This is a question message.</p>
-              <p class="question dismissible message">This is a dismissible question message.</p>
-              <p class="alert message">This is an alert message.</p>
-              <p class="alert dismissible message">This is a dismissible alert message.</p>
-              <p class="warning message">This is a warning message.</p>
-              <p class="warning dismissible message">This is a dismissible warning message.</p>
-              <p class="error message">This is an error message.</p>
-              <p class="error dismissible message">This is a dismissible error message.</p><br>
-              <div class="row">
-                <div class="one half small-tablet pad-right no-pad-mobile">
-                  <h4>Square</h4>
-                  <p class="message square">This is a square message.</p>
-                  <p class="message square dismissible">This is a dismissible square message.</p>
-                </div>
-                <div class="one half small-tablet">
-                  <h4>Round</h4>
-                  <p class="message round align-center">This is a round message.</p>
-                  <p class="message round dismissible align-center">This is a dismissible round message.</p>
-                </div>
-              </div>
-            </div>
             <div class="one half padded bounceInDown animated">
-              <h4>Colors</h4>
-              <p class="yellow message">This is a yellow message.</p>
-              <p class="dismissible yellow message">This is a dismissible yellow message.</p>
-              <p class="orange message">This is a orange message.</p>
-              <p class="dismissible orange message">This is a dismissible orange message.</p>
-              <p class="red message">This is a red message.</p>
-              <p class="dismissible red message">This is a dismissible red message.</p>
-              <p class="pink message">This is a pink message.</p>
-              <p class="dismissible pink message">This is a dismissible pink message.</p>
-              <p class="purple message">This is a purple message.</p>
-              <p class="dismissible purple message">This is a dismissible purple message.</p>
-              <p class="asphalt message">This is a asphalt message.</p>
-              <p class="dismissible asphalt message">This is a dismissible asphalt message.</p>
-              <p class="blue message">This is a blue message.</p>
-              <p class="dismissible blue message">This is a dismissible blue message.</p>
-              <p class="turquoise message">This is a turquoise message.</p>
-              <p class="dismissible turquoise message">This is a dismissible turquoise message.</p>
-              <p class="green message">This is a green message.</p>
-              <p class="dismissible green message">This is a dismissible green message.</p>
-              <p class="charcoal message">This is a charcoal message.</p>
-              <p class="dismissible charcoal message">This is a dismissible charcoal message.</p>
+              <h4>建议</h4>
+            </div>
+            <hr>
+            <div id="mainlist" class="one half padded bounceInUp animated">
+              <h4>消息</h4>
             </div>
           </div>
         </div>
@@ -138,6 +112,8 @@
       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
+
+
     </script>
   </body>
 </html>
