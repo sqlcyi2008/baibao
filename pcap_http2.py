@@ -14,6 +14,6 @@ for ptime, pdata in pc:
             hp = p.ip.tcp.data
             # print hp
             if hp.strip() and (hp.startswith('GET') or hp.startswith('POST')):
-                print hp
+                print (hp)
                 #r = redis.Redis(host='localhost', port=6379, db=0)
                 #r.lpush("baibaoxiang", "pcap_http=" + hp)

@@ -66,13 +66,13 @@ def capture_packet(q):
             #ip = '%d.%d.%d.%d' % tuple(map(ord, list(ipp.src.decode())))
             #print(ip + ":" + str(ipp.data.dport))
             if ipp.data.__class__.__name__ == 'TCP' and ipp.data.dport == 8080:
-                #print (ipp.data.data)
+                #print (ipp.data.data)   ignore
                 tcp=''
                 try:
-                    tcp = ipp.data.data.decode()
+                    tcp = ipp.data.data.decode(encoding="utf-8", errors="ignore")
                 except Exception as e:
                     print(e)
-
+                #print(tcp)
                 if tcp.startswith('GET') or tcp.startswith('POST'):
                     print(tcp.splitlines()[0])
                     q.put(tcp.splitlines()[0])

@@ -40,7 +40,7 @@ class Application(tornado.web.Application):
             (r'/echo', WebSocketHandler)
         ]
 
-        settings = {'template_path': '.','static_path':'static','static_url_prefix':'/static/'}
+        settings = {'template_path': '.','static_path':'1111static','static_url_prefix':'/1111static/'}
         tornado.web.Application.__init__(self, handlers, **settings)
 
 # 抓包进程执行代码:

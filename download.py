@@ -12,7 +12,7 @@ def Schedule(a,b,c):
     if per > 100 :
         per = 100
     print '%.2f%%' % per
-url = 'https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/logo_white_fe6da1ec.png'
+url = 'https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/1111static/superman/img/logo/logo_white_fe6da1ec.png'
 #local = url.split('/')[-1]
 local = os.path.join('d:\\','logo_white_fe6da1ec.png')
 print local
