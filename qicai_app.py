@@ -55,6 +55,7 @@ class Application(tornado.web.Application):
 # 抓包进程执行代码:
 def capture_packet(q):
     sniffer = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_IP)
+    #10.9.11.72
     sniffer.bind(("127.0.0.1", 0))
     sniffer.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
     # receive all packages
@@ -65,14 +66,14 @@ def capture_packet(q):
             ipp = dpkt.ip.IP(raw_buffer)
             #ip = '%d.%d.%d.%d' % tuple(map(ord, list(ipp.src.decode())))
             #print(ip + ":" + str(ipp.data.dport))
-            if ipp.data.__class__.__name__ == 'TCP' and ipp.data.dport == 8080:
+            if ipp.data.__class__.__name__ == 'TCP' and ipp.data.dport == 1521:
                 #print (ipp.data.data)   ignore
                 tcp=''
                 try:
                     tcp = ipp.data.data.decode(encoding="utf-8", errors="ignore")
                 except Exception as e:
                     print(e)
-                #print(tcp)
+                print(tcp)
                 if tcp.startswith('GET') or tcp.startswith('POST'):
                     print(tcp.splitlines()[0])
                     q.put(tcp.splitlines()[0])
