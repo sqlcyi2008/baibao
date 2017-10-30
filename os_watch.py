@@ -1,4 +1,5 @@
 import psutil
+import json
 
 for proc in psutil.process_iter():
     try:
@@ -6,4 +7,6 @@ for proc in psutil.process_iter():
     except psutil.NoSuchProcess:
         pass
     else:
-        print(pinfo)
+        if pinfo.get("cmdline"):
+            jj = json.dumps(pinfo)
+            print(jj)

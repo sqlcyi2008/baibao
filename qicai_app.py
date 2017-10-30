@@ -15,6 +15,10 @@ class IndexPageHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('index.html')
 
+class TheQRCodeHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('theqrcode.png')
+
 #返回网络包信息
 class PacketHandler(tornado.web.RequestHandler):
     def get(self):
@@ -46,7 +50,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r'/', IndexPageHandler),
-            (r'/echo', WebSocketHandler),
+            (r'/theqrcode.png', TheQRCodeHandler),
             (r'/pkt', PacketHandler)
         ]
 
@@ -68,7 +72,7 @@ def os_watch(q):
                     print(jj)
                     q.put(jj)
         #暂停
-        time.sleep(3)
+        time.sleep(10)
 
 # 抓包进程执行代码:
 def capture_packet(q):
@@ -82,10 +86,7 @@ def capture_packet(q):
         while True:
             raw_buffer = sniffer.recvfrom(65535)[0]
             ipp = dpkt.ip.IP(raw_buffer)
-            #ip = '%d.%d.%d.%d' % tuple(map(ord, list(ipp.src.decode())))
-            #print(ip + ":" + str(ipp.data.dport))
             if ipp.data.__class__.__name__ == 'TCP' and ipp.data.dport == 80:
-                #print (ipp.data.data)   ignore
                 tcp=''
                 try:
                     tcp = ipp.data.data.decode(encoding="utf-8", errors="ignore")
@@ -95,11 +96,32 @@ def capture_packet(q):
                 if tcp.startswith('GET') or tcp.startswith('POST'):
                     print(tcp.splitlines()[0])
                     q.put(tcp.splitlines()[0])
+            #mysql
+            if ipp.data.__class__.__name__ == 'TCP' and ipp.data.dport == 3306:
+                #print (ipp.data.data)   ignore
+                tcp=''
+                try:
+                    tcp = ipp.data.data.decode(encoding="utf-8", errors="ignore")
+                except Exception as e:
+                    print(e)
+                if tcp.index('select') > -1 or tcp.index('insert') > -1 or tcp.index('update') > -1 or tcp.index('delete') > -1:
+                    q.put(tcp.splitlines()[0])
+            #oracle
+            if ipp.data.__class__.__name__ == 'TCP' and ipp.data.dport == 1521:
+                #print (ipp.data.data)   ignore
+                tcp=''
+                try:
+                    tcp = ipp.data.data.decode(encoding="utf-8", errors="ignore")
+                except Exception as e:
+                    print(e)
+                if tcp.index('select') > -1 or tcp.index('insert') > -1 or tcp.index('update') > -1 or tcp.index('delete') > -1:
+                    q.put(tcp.splitlines()[0])
     except KeyboardInterrupt:
         pass
     # disabled promiscuous mode
     sniffer.ioctl(socket.SIO_RCVALL, socket.RCVALL_OFF)
 
+#获取本机默认IP地址
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -122,7 +144,7 @@ if __name__ == '__main__':
     pw.start()
 
     ow = Process(target=os_watch, args=(q,))
-    #ow.start()
+    ow.start()
 
     ws_app = Application()
     server = tornado.httpserver.HTTPServer(ws_app)
